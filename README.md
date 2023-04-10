@@ -1,5 +1,4 @@
-<img src="https://github.com/PHELAT/Poolakey/raw/master/asset/Poolakey.jpg"/>
-<br/>
+<img src="https://github.com/PHELAT/Poolakey/raw/master/asset/Poolakey.jpg"/><br/>
 -
 Android In-App Billing SDK for [Cafe Bazaar](https://cafebazaar.ir/?l=en) App Store.
 ## Getting Started
