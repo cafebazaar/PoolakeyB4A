@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <doclet-version-NOT-library-version>1.07</doclet-version-NOT-library-version>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4AConnection</name>
+        <shortname>PoolakeyConnection</shortname>
+        <objectwrapper>ir.cafebazaar.poolakey.Connection</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>Disconnect</name>
+            <comment>You can use this function to actually disconnect from the billing service.</comment>
+            <returntype>void</returntype>
+        </method>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <property>
+            <name>HasDisconnected</name>
+            <returntype>boolean</returntype>
+            <comment>You can use this function to get notified about the billing service's connection state.</comment>
+        </property>
+        <property>
+            <name>HasConnected</name>
+            <returntype>boolean</returntype>
+            <comment>You can use this function to get notified about the billing service's connection state.</comment>
+        </property>
+        <property>
+            <name>HasFailedToConnect</name>
+            <returntype>boolean</returntype>
+            <comment>You can use this function to get notified about the billing service's connection state.</comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4AException</name>
+        <shortname>PoolakeyException</shortname>
+        <objectwrapper>java.lang.Throwable</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <method>
+            <name>Initialize</name>
+            <comment></comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>throwable</name>
+                <type>java.lang.Throwable</type>
+            </parameter>
+        </method>
+        <property>
+            <name>IsIAPNotSupportedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsSubsNotSupportedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsDisconnectException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsDynamicPriceNotSupportedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsBazaarNotFoundException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsResultNotOkayException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsConsumeFailedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsAbortedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsBazaarNotSupportedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsPurchaseHijackedException</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>ErrorMessage</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4APayment</name>
+        <shortname>Poolakey</shortname>
+        <comment>Android In-App Billing SDK for CafeBazaar App Store.</comment>
+        <objectwrapper>ir.cafebazaar.poolakey.Payment</objectwrapper>
+        <owner>activity</owner>
+        <event>ConnectionSucceed</event>
+        <event>Disconnected</event>
+        <event>ConnectionFailed (Error As PoolakeyException)</event>
+        <event>CheckTrialSubscriptionSucceed (Info As PoolakeyTrialSubscriptionInfo)</event>
+        <event>CheckTrialSubscriptionFailed (Error As PoolakeyException)</event>
+        <event>QuerySucceed (Query As PoolakeyPurchaseQuery)</event>
+        <event>QueryFailed (Error As PoolakeyException)</event>
+        <event>GetSkuDetailsSucceed (Query As PoolakeySkuDetailsQuery)</event>
+        <event>GetSkuDetailsFailed (Error As PoolakeyException)</event>
+        <event>ConsumeSucceed</event>
+        <event>ConsumeFailed (Error As PoolakeyException)</event>
+        <event>PurchaseSucceed (PurchaseInfo As PoolakeyPurchaseInfo)</event>
+        <event>PurchaseFlowBegan</event>
+        <event>PurchaseCanceled</event>
+        <event>PurchaseFailed (Error As PoolakeyException)</event>
+        <event>PurchaseFailedToBeginFlow (Error As PoolakeyException)</event>
+        <permission>com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR</permission>
+        <method>
+            <name>GetPurchasedProducts</name>
+            <comment>You can use this function to query user's purchased products, Note that if you want to query
+ user's subscribed products, you have to use 'getSubscribedProducts' function, since this function
+ will only query purchased products and not the subscribed products.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_QuerySucceed (Query As BazaarPurchaseQuery)&lt;/code&gt;
+ &lt;code&gt;EventName_QueryFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>GetSubscribedProducts</name>
+            <comment>You can use this function to query user's subscribed products, Note that if you want to query
+ user's purchased products, you have to use 'getPurchasedProducts' function, since this function
+ will only query subscribed products and not the purchased products.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_QuerySucceed (Query As BazaarPurchaseQuery)&lt;/code&gt;
+ &lt;code&gt;EventName_QueryFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>Connect</name>
+            <comment>You have to use this function to connect to the In-App Billing service. Note that you have to
+ connect to Bazaar's Billing service before using any other available functions, So make sure
+ you call this function before doing anything else, also make sure that you are connected to
+ the billing service through Connection.
+ &lt;p&gt;
+ Returns a Connection interface which you can use to disconnect from the
+ service or get the current connection state.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_ConnectionSucceed&lt;/code&gt;
+ &lt;code&gt;EventName_Disconnected&lt;/code&gt;
+ &lt;code&gt;EventName_ConnectionFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4AConnection</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>GetInAppSkuDetails</name>
+            <comment>You can use this function to get detail of inApp product sku's,
+ &lt;b&gt;SkuIds:&lt;/b&gt; This contain all sku id's that you want to get info about it.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_GetSkuDetailsSucceed (Query As PoolakeySkuDetailsQuery)&lt;/code&gt;
+ &lt;code&gt;EventName_GetSkuDetailsFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <parameter>
+                <name>SkuIds</name>
+                <type>java.lang.String[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>SubscribeProduct</name>
+            <comment>You can use this function to navigate user to Bazaar's payment activity to subscribe a product.
+ Note that for purchasing a product you have to use the 'purchaseProduct' function.
+ &lt;b&gt;Request:&lt;/b&gt; This contains some information about the product that we are going to subscribe.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_PurchaseSucceed (PurchaseInfo As PoolakeyPurchaseInfo)&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseFlowBegan&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseCanceled&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseFailed (Error As PoolakeyException)&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseFailedToBeginFlow (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <parameter>
+                <name>Request</name>
+                <type>ir.cafebazaar.poolakey.b4a.B4APurchaseRequest</type>
+            </parameter>
+        </method>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <method>
+            <name>Initialize</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APayment.B4APaymentConfiguration</returntype>
+        </method>
+        <method>
+            <name>ConsumeProduct</name>
+            <comment>You can use this function to consume an already purchased product. Note that you can't use
+ this function to consume subscribed products.
+ &lt;b&gt;PurchaseToken:&lt;/b&gt; You have received this token when user purchased that particular product.
+ You can also use 'getPurchasedProducts' function to get all the purchased products by this
+ particular user.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_ConsumeSucceed&lt;/code&gt;
+ &lt;code&gt;EventName_ConsumeFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <parameter>
+                <name>PurchaseToken</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>GetSubscriptionSkuDetails</name>
+            <comment>You can use this function to get detail of subscription product sku's,
+ &lt;b&gt;SkuIds:&lt;/b&gt; This contain all sku id's that you want to get info about it.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_GetSkuDetailsSucceed (Query As PoolakeySkuDetailsQuery)&lt;/code&gt;
+ &lt;code&gt;EventName_GetSkuDetailsFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <parameter>
+                <name>SkuIds</name>
+                <type>java.lang.String[]</type>
+            </parameter>
+        </method>
+        <method>
+            <name>CheckTrialSubscription</name>
+            <comment>You can use this function to check trial subscription,
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_CheckTrialSubscriptionSucceed (Info As BazaarTrialSubscriptionInfo)&lt;/code&gt;
+ &lt;code&gt;EventName_CheckTrialSubscriptionFailed (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>PurchaseProduct</name>
+            <comment>You can use this function to navigate user to Bazaar's payment activity to purchase a product.
+ Note that for subscribing a product you have to use the 'subscribeProduct' function.
+ &lt;b&gt;Request:&lt;/b&gt; This contains some information about the product that we are going to purchase.
+
+ &lt;b&gt;Events:&lt;/b&gt;
+ &lt;code&gt;EventName_PurchaseSucceed (PurchaseInfo As PoolakeyPurchaseInfo)&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseFlowBegan&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseCanceled&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseFailed (Error As PoolakeyException)&lt;/code&gt;
+ &lt;code&gt;EventName_PurchaseFailedToBeginFlow (Error As PoolakeyException)&lt;/code&gt;</comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+            <parameter>
+                <name>EventName</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <parameter>
+                <name>Request</name>
+                <type>ir.cafebazaar.poolakey.b4a.B4APurchaseRequest</type>
+            </parameter>
+        </method>
+        <property>
+            <name>Connection</name>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4AConnection</returntype>
+            <comment>Returns last Connection interface which you can use to disconnect from the
+ service or get the current connection state.</comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4APayment.B4APaymentConfiguration</name>
+        <owner>process</owner>
+        <method>
+            <name>EnableSecurityCheck</name>
+            <comment>You have to use this class in order to enable local security checks. You can access to your
+ app's public rsa key from Bazaar's developer panel, under "In-App Billing" tab:
+ https://pishkhan.cafebazaar.ir/apps/YOUR_APPS_PACKAGE_NAME/in-app-billing</comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APayment.B4APaymentConfiguration</returntype>
+            <parameter>
+                <name>RSAPublicKey</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>DisableSecurityCheck</name>
+            <comment>You have to use this object in order to disable local security checks.</comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APayment.B4APaymentConfiguration</returntype>
+        </method>
+        <method>
+            <name>ShouldSupportSubscription</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APayment.B4APaymentConfiguration</returntype>
+            <parameter>
+                <name>support</name>
+                <type>boolean</type>
+            </parameter>
+        </method>
+        <method>
+            <name>Build</name>
+            <comment></comment>
+            <returntype>void</returntype>
+            <parameter>
+                <name>ba</name>
+                <type>anywheresoftware.b4a.BA</type>
+            </parameter>
+        </method>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4APurchaseInfo</name>
+        <shortname>PoolakeyPurchaseInfo</shortname>
+        <objectwrapper>ir.cafebazaar.poolakey.entity.PurchaseInfo</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <property>
+            <name>PurchaseToken</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>PurchaseTime</name>
+            <returntype>long</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>PackageName</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>ProductId</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>Payload</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>OrderId</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>OriginalJson</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>HasPurchased</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>HasRefunded</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>DataSignature</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4APurchaseQuery</name>
+        <shortname>PoolakeyPurchaseQuery</shortname>
+        <objectwrapper>java.util.List</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>GetByOrderId</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APurchaseInfo</returntype>
+            <parameter>
+                <name>OrderId</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>Get</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APurchaseInfo</returntype>
+            <parameter>
+                <name>index</name>
+                <type>int</type>
+            </parameter>
+        </method>
+        <method>
+            <name>GetByPurchaseToken</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APurchaseInfo</returntype>
+            <parameter>
+                <name>PurchaseToken</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <method>
+            <name>GetByProductId</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4APurchaseInfo</returntype>
+            <parameter>
+                <name>ProductId</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <property>
+            <name>Size</name>
+            <returntype>int</returntype>
+            <comment></comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4APurchaseRequest</name>
+        <shortname>PoolakeyPurchaseRequest</shortname>
+        <owner>process</owner>
+        <property>
+            <name>DynamicPriceToken</name>
+            <returntype>java.lang.String</returntype>
+            <parameter>
+                <name>dynamicPriceToken</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <comment></comment>
+        </property>
+        <property>
+            <name>ProductId</name>
+            <returntype>java.lang.String</returntype>
+            <parameter>
+                <name>productId</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <comment></comment>
+        </property>
+        <property>
+            <name>Payload</name>
+            <returntype>java.lang.String</returntype>
+            <parameter>
+                <name>payload</name>
+                <type>java.lang.String</type>
+            </parameter>
+            <comment></comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4ASkuDetails</name>
+        <shortname>PoolakeySkuDetails</shortname>
+        <objectwrapper>ir.cafebazaar.poolakey.entity.SkuDetails</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <property>
+            <name>Type</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>Description</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>Price</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>Title</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>Sku</name>
+            <returntype>java.lang.String</returntype>
+            <comment></comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4ASkuDetailsQuery</name>
+        <shortname>PoolakeySkuDetailsQuery</shortname>
+        <objectwrapper>java.util.List</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>Get</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4ASkuDetails</returntype>
+            <parameter>
+                <name>index</name>
+                <type>int</type>
+            </parameter>
+        </method>
+        <method>
+            <name>GetBySkuId</name>
+            <comment></comment>
+            <returntype>ir.cafebazaar.poolakey.b4a.B4ASkuDetails</returntype>
+            <parameter>
+                <name>SkuId</name>
+                <type>java.lang.String</type>
+            </parameter>
+        </method>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <property>
+            <name>Size</name>
+            <returntype>int</returntype>
+            <comment></comment>
+        </property>
+    </class>
+    <class>
+        <name>ir.cafebazaar.poolakey.b4a.B4ATrialSubscriptionInfo</name>
+        <shortname>PoolakeyTrialSubscriptionInfo</shortname>
+        <objectwrapper>ir.cafebazaar.poolakey.entity.TrialSubscriptionInfo</objectwrapper>
+        <owner>process</owner>
+        <method>
+            <name>IsInitialized</name>
+            <comment></comment>
+            <returntype>boolean</returntype>
+        </method>
+        <property>
+            <name>TrialPeriodDays</name>
+            <returntype>int</returntype>
+            <comment></comment>
+        </property>
+        <property>
+            <name>IsAvailable</name>
+            <returntype>boolean</returntype>
+            <comment></comment>
+        </property>
+    </class>
+    <version>2.1</version>
+    <author>CafeBazaar</author>
+    <dependsOn>poolakey-2.1.0.aar</dependsOn>
+</root>

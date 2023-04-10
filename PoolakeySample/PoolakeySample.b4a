@@ -1,0 +1,218 @@
+﻿Build1=Default,ir.cafebazaar.poolakeysample
+File1=Layout.bal
+FileGroup1=Default Group
+Group=Default Group
+Library1=appcompat
+Library2=core
+Library3=poolakey
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="31"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~~\n~SetApplicationAttribute(android:theme, "@style/Theme.AppCompat.Light.DarkActionBar")~\n~'End of default text.~\n~~\n~CreateResourceFromFile(Macro, Poolakey.BillingReceiver)
+Module1=Starter
+NumberOfFiles=1
+NumberOfLibraries=3
+NumberOfModules=1
+Version=12.2
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: Poolakey Sample
+	#VersionCode: 210
+	#VersionName: 2.1.0
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: portrait
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	Private PurchaseOrSubscribe As Boolean
+End Sub
+
+Sub Globals
+	Dim Poolakey As Poolakey
+	
+	Private ConsumeSwitch As ACSwitch
+	Private DynamicPriceToken As ACEditText
+	Private SkuValueInput As ACEditText
+	Private ServiceConnectionStatus As Label
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	Activity.LoadLayout("Layout")
+	
+	Poolakey.Initialize _
+		.EnableSecurityCheck("KEY") _
+		.Build
+		
+	StartPaymentConnection
+End Sub
+
+Sub Activity_Resume
+	LoadConnectionStatus
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+	If UserClosed Then Poolakey.Connection.Disconnect
+End Sub
+
+#Region Connection
+Private Sub StartPaymentConnection
+	Poolakey.Connect("Poolakey")
+End Sub
+
+Private Sub LoadConnectionStatus
+	If IsPaused(Me) Then Return
+	If Poolakey.Connection.HasConnected Then
+		ServiceConnectionStatus.Text = "Service: Connected"
+	Else If Poolakey.Connection.HasFailedToConnect Then
+		ServiceConnectionStatus.Text = "Service: Failed to Connect"
+	Else
+		ServiceConnectionStatus.Text = "Service: Not Connected"
+	End If
+End Sub
+
+Private Sub Poolakey_ConnectionSucceed
+	LoadConnectionStatus
+End Sub
+
+Private Sub Poolakey_Disconnected
+	LoadConnectionStatus
+End Sub
+
+Private Sub Poolakey_ConnectionFailed (Error As PoolakeyException)
+	ToastMessageShow(Error, True)
+	LoadConnectionStatus
+End Sub
+#End Region
+
+#Region Purchase
+Private Sub PurchaseButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	PurchaseOrSubscribe = True
+	Purchase(True)
+End Sub
+
+Private Sub SubscribeButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	PurchaseOrSubscribe = False
+	Purchase(True)
+End Sub
+
+Private Sub Purchase(WithDynamicPriceToken As Boolean)
+	Dim Request As PoolakeyPurchaseRequest
+	Request.ProductId = SkuValueInput.Text
+	Request.Payload = "purchasePayload"
+	If WithDynamicPriceToken Then
+		Request.DynamicPriceToken = DynamicPriceToken.Text
+	End If
+	If PurchaseOrSubscribe Then
+		Poolakey.PurchaseProduct("Purchase", Request)
+	Else
+		Poolakey.SubscribeProduct("Purchase", Request)
+	End If
+End Sub
+
+Private Sub Purchase_PurchaseFlowBegan
+	ToastMessageShow("Purchase flow began", False)
+End Sub
+
+Private Sub Purchase_PurchaseFailedToBeginFlow (Error As PoolakeyException)
+	' bazaar need to update, in this case we only launch purchase without discount
+	If Error.IsDynamicPriceNotSupportedException Then
+		ToastMessageShow("Dynamic price token not supported in this bazaar version", False)
+		Purchase(False)
+	Else
+		ToastMessageShow("Purchase failed: " & Error, False)
+	End If
+End Sub
+
+Private Sub Purchase_PurchaseSucceed (PurchaseInfo As PoolakeyPurchaseInfo)
+	ToastMessageShow("Purchase succeed", False)
+	If Not(IsPaused(Me)) And ConsumeSwitch.Checked Then 
+		ConsumePurchasedItem(PurchaseInfo.PurchaseToken)
+	End If
+End Sub
+
+Private Sub Purchase_PurchaseCanceled
+	ToastMessageShow("Purchase Cancelled", False)
+End Sub
+
+Private Sub Purchase_PurchaseFailed (Error As PoolakeyException)
+	ToastMessageShow("Purchase failed: " & Error, False)
+End Sub
+#End Region
+
+#Region Consume Purchase
+Private Sub ConsumePurchasedItem(PurchaseToken As String) 
+	Poolakey.ConsumeProduct("Consume", PurchaseToken)
+End Sub
+
+Private Sub Consume_ConsumeSucceed
+	ToastMessageShow("Consume succeed", False)
+End Sub
+
+Private Sub Consume_ConsumeFailed (Error As PoolakeyException)
+	ToastMessageShow("Consume failed: " & Error, False)
+End Sub
+#End Region
+
+#Region Purchase Query
+Private Sub QueryPurchasedItemsButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	Poolakey.GetPurchasedProducts("Query")
+End Sub
+
+Private Sub QuerySubscribedItemsButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	Poolakey.GetSubscribedProducts("Query")
+End Sub
+
+Private Sub Query_QuerySucceed (Query As PoolakeyPurchaseQuery)
+	If Query.GetByProductId(SkuValueInput.Text) == Null Then
+		ToastMessageShow("User has not bought this item", False)
+	Else
+		ToastMessageShow("User has bought this item", False)
+	End If
+End Sub
+
+Private Sub Query_QueryFailed (Error As PoolakeyException)
+	ToastMessageShow("Query failed: " & Error, False)
+End Sub
+#End Region
+
+#Region CheckTrialSubscription
+Private Sub CheckTrialSubscriptionButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	Poolakey.CheckTrialSubscription("Trial")
+End Sub
+
+Private Sub Trial_CheckTrialSubscriptionSucceed (Info As PoolakeyTrialSubscriptionInfo)
+	ToastMessageShow(Info, False)
+End Sub
+
+Private Sub Trial_CheckTrialSubscriptionFailed (Error As PoolakeyException)
+	ToastMessageShow(Error, False)
+End Sub
+#End Region
+
+#Region SkuDetail
+Private Sub GetSkuDetailInAppButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	Poolakey.GetInAppSkuDetails("Sku", Array As String(SkuValueInput.Text))
+End Sub
+
+Private Sub GetSkuDetailSubscriptionButton_Click
+	If Not(Poolakey.Connection.HasConnected) Then Return
+	Poolakey.GetSubscriptionSkuDetails("Sku", Array As String(SkuValueInput.Text))
+End Sub
+
+Private Sub Sku_GetSkuDetailsSucceed (Query As PoolakeySkuDetailsQuery)
+	ToastMessageShow(Query, False)
+End Sub
+
+Private Sub Sku_GetSkuDetailsFailed (Error As PoolakeyException)
+	ToastMessageShow("Get sku detail failed: " & Error, False)
+End Sub
+#End Region
